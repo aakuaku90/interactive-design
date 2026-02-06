@@ -13,13 +13,13 @@ export function createStateMachine() {
     listeners.push(fn);
   }
 
-  function notify(prev, next) {
+  function notify(prev, next, data) {
     for (const fn of listeners) {
-      fn(next, prev);
+      fn(next, prev, data);
     }
   }
 
-  function transition(action) {
+  function transition(action, data) {
     const allowed = TRANSITIONS[currentState];
     if (!allowed || !allowed[action]) {
       console.warn(`Invalid transition: ${currentState} + ${action}`);
@@ -27,7 +27,7 @@ export function createStateMachine() {
     }
     const prev = currentState;
     currentState = allowed[action];
-    notify(prev, currentState);
+    notify(prev, currentState, data);
     return true;
   }
 

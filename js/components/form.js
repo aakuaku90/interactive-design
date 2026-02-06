@@ -72,7 +72,7 @@ export function initForm(stateMachine) {
       // Simulate slight network delay for UX
       await new Promise((r) => setTimeout(r, 800));
       await saveSubmission(data);
-      stateMachine.transition('SUCCESS');
+      stateMachine.transition('SUCCESS', { name: data.name.trim() });
       form.reset();
     } catch (err) {
       console.error('Save failed:', err);

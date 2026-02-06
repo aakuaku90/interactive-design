@@ -20,21 +20,6 @@
   }
 }
 
-@keyframes slide-down {
-  from {
-    opacity: 0;
-    transform: translateY(-16px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fade-out {
-  from { opacity: 1; }
-  to { opacity: 0; }
-}
 
 /* Spinner rotation */
 .btn-spinner svg {
@@ -56,11 +41,3 @@
   animation: shake 300ms ease;
 }
 
-/* Toast animations */
-.toast.animate-slide-in {
-  animation: slide-down 300ms var(--ease) forwards;
-}
-
-.toast.animate-fade-out {
-  animation: fade-out 300ms var(--ease) forwards;
-}

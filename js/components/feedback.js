@@ -1,40 +1,22 @@
-const RESET_DELAY = 3000;
+import { show as showSheet } from './bottom-sheet.js';
 
 export function initFeedback(stateMachine) {
   const form = document.getElementById('contact-form');
   const btn = document.getElementById('submit-btn');
 
-  stateMachine.subscribe((state) => {
-    // Update form class
+  stateMachine.subscribe((state, prev, data) => {
     form.classList.toggle('is-submitting', state === 'submitting');
-
-    // Update button
     btn.classList.toggle('is-submitting', state === 'submitting');
     btn.classList.toggle('is-success', state === 'success');
     btn.disabled = state === 'submitting' || state === 'success';
 
-    // Toast & auto-reset
+    const resetFn = () => stateMachine.transition('RESET');
+
     if (state === 'success') {
-      showToast('Submission saved successfully!', 'success');
-      setTimeout(() => stateMachine.transition('RESET'), RESET_DELAY);
+      const name = data?.name || '';
+      showSheet(`Thanks ${name}, your submission was saved!`, 'success', { autoDismiss: 0, onDismiss: resetFn });
     } else if (state === 'error') {
-      showToast('Something went wrong. Please try again.', 'error');
-      setTimeout(() => stateMachine.transition('RESET'), RESET_DELAY);
+      showSheet('Something went wrong. Please try again.', 'error', { autoDismiss: 0, onDismiss: resetFn });
     }
   });
 }
-
-export function showToast(message, type = 'success') {
-  const container = document.getElementById('toast-container');
-  const toast = document.createElement('div');
-  toast.className = `toast toast-${type} animate-slide-in`;
-  toast.textContent = message;
-  container.appendChild(toast);
-
-  setTimeout(() => {
-    toast.classList.remove('animate-slide-in');
-    toast.classList.add('animate-fade-out');
-    toast.addEventListener('animationend', () => toast.remove(), { once: true });
-  }, RESET_DELAY);
-}
-
